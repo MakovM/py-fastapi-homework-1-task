@@ -29,9 +29,10 @@ async def movies_list(
     if not movies:
         raise HTTPException(status_code=404, detail="No movies found.")
 
-    base_url = str(request.url).split("?")[0]
-    prev_page = f"{base_url}?page={page - 1}&per_page={per_page}" if page > 1 else None
-    next_page = f"{base_url}?page={page + 1}&per_page={per_page}" if page < total_pages else None
+    root_path = request.scope.get("root_path", "")
+    base_path = root_path + request.url.path
+    prev_page = f"{base_path}?page={page - 1}&per_page={per_page}" if page > 1 else None
+    next_page = f"{base_path}?page={page + 1}&per_page={per_page}" if page < total_pages else None
 
     return {
         "movies": [MovieDetailResponseSchema.model_validate(m) for m in movies],
