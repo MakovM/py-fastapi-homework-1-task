@@ -22,7 +22,6 @@ async def movies_list(
 
     total_pages = (total_items + per_page - 1) // per_page
     offset = (page - 1) * per_page
-
     stmt = select(MovieModel).offset(offset).limit(per_page)
     movies = (await db.scalars(stmt)).all()
 
